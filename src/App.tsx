@@ -73,7 +73,7 @@ export function App() {
       </main>
 
       {/* Global Editorial Footer */}
-      <Footer />
+      <Footer onOpenContact={() => {}} />
     </div>
   )
 }
