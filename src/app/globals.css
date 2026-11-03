@@ -2,15 +2,15 @@
 
 @layer base {
   :root {
-    --bg-wall-light: #E6E2DC;
-    --bg-wall-shade: #D9D4CE;
+    --bg-wall-light: #E8E3DC;
+    --bg-wall-shade: #DDD7CE;
     --bg-floor-peach: #D8BFAF;
     --bg-baseboard: #8E7A6E;
-    --text-primary: #1A1818;
-    --text-muted: #544E49;
+    --text-primary: #181615;
+    --text-muted: #5C554E;
     --accent-maroon: #6B3A3F;
     --accent-maroon-hover: #582C31;
-    --door-navy: #1F2F55;
+    --door-navy: #1D3254;
     --brass-start: #F3D794;
     --brass-mid: #DFB668;
     --brass-end: #B88536;
@@ -31,72 +31,73 @@
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    background: radial-gradient(ellipse 90% 80% at 50% 20%, #FAF7F2 0%, #E6E2DC 50%, #D9D4CE 100%);
+    background: radial-gradient(ellipse 95% 80% at 50% 15%, #FAF8F5 0%, #E8E3DC 55%, #DDD7CE 100%);
     color: var(--text-primary);
     font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
   }
 
   ::selection {
-    background-color: #1F2F55;
-    color: #F8F6F2;
+    background-color: #6B3A3F;
+    color: #FAF8F5;
   }
 
   /* Accessibility: visible focus ring */
   *:focus-visible {
     outline: 2px solid #6B3A3F;
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 }
 
 /* Plaster Wall Subtle Texture & Vignette */
 .plaster-wall {
-  background-color: #E6E2DC;
+  background-color: #E8E3DC;
   background-image: 
-    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 65%),
-    linear-gradient(180deg, rgba(230, 226, 220, 0.8) 0%, rgba(217, 212, 206, 0.95) 100%);
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.75) 0%, transparent 65%),
+    linear-gradient(180deg, rgba(235, 230, 223, 0.85) 0%, rgba(221, 215, 206, 0.98) 100%);
   position: relative;
 }
 
-/* Hallway Baseboard & Peach Floor */
+/* Hallway Baseboard & Architectural Floor */
 .hallway-baseboard {
-  height: 24px;
-  background: linear-gradient(180deg, #A49083 0%, #7E6C61 40%, #5E4E44 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: background 0.5s ease;
+  height: 22px;
+  background: linear-gradient(180deg, #B5A397 0%, #8E7B6F 45%, #66564C 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+  transition: background 0.5s ease, border-color 0.5s ease;
 }
 
 html.dark .hallway-baseboard {
-  background: linear-gradient(180deg, #3A2F29 0%, #241D19 40%, #15110E 100%);
+  background: linear-gradient(180deg, #322A25 0%, #211B18 45%, #14100E 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hallway-floor {
-  height: 120px;
-  background: linear-gradient(180deg, #CEB2A1 0%, #D8BFAF 30%, #E2CEBF 100%);
+  height: 96px;
+  background: linear-gradient(180deg, #CBB09F 0%, #D8C0B0 35%, #E3CEC0 100%);
   border-top: 2px solid #5A493F;
-  box-shadow: inset 0 16px 24px -8px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 14px 24px -8px rgba(0, 0, 0, 0.22);
   position: relative;
-  transition: background 0.5s ease;
+  transition: background 0.5s ease, border-color 0.5s ease;
 }
 
 html.dark .hallway-floor {
-  background: linear-gradient(180deg, #4A3328 0%, #35241C 30%, #231711 100%);
-  border-top: 2px solid #231711;
-  box-shadow: inset 0 16px 24px -8px rgba(0, 0, 0, 0.55);
+  background: linear-gradient(180deg, #2D211B 0%, #221915 35%, #17110E 100%);
+  border-top: 2px solid #130E0C;
+  box-shadow: inset 0 16px 28px -8px rgba(0, 0, 0, 0.65);
 }
 
 html.dark body {
-  background: radial-gradient(ellipse 90% 80% at 50% 20%, #181920 0%, #121316 60%, #0A0A0D 100%);
-  color: #FAF7F2;
+  background: radial-gradient(ellipse 95% 80% at 50% 15%, #191B22 0%, #121318 60%, #0B0C0F 100%);
+  color: #F5F2EB;
 }
 
 html.dark .plaster-wall {
-  background-color: #121316;
+  background-color: #121318;
   background-image: 
-    radial-gradient(circle at 50% 20%, rgba(255, 220, 150, 0.08) 0%, transparent 65%),
-    linear-gradient(180deg, rgba(24, 25, 32, 0.9) 0%, rgba(14, 15, 18, 0.98) 100%);
+    radial-gradient(circle at 50% 18%, rgba(255, 218, 145, 0.07) 0%, transparent 65%),
+    linear-gradient(180deg, rgba(24, 26, 34, 0.92) 0%, rgba(14, 15, 20, 0.98) 100%);
 }
 
 /* Skeuomorphic Brass Plate */
@@ -104,16 +105,16 @@ html.dark .plaster-wall {
   background: linear-gradient(135deg, #FBF2D5 0%, #E2BE76 25%, #C29643 55%, #E9CA87 75%, #A3792E 100%);
   border: 1px solid #7D5920;
   box-shadow: 
-    0 1px 1px rgba(255, 255, 255, 0.6) inset,
+    0 1px 1px rgba(255, 255, 255, 0.65) inset,
     0 -1px 1px rgba(0, 0, 0, 0.35) inset,
-    0 4px 8px rgba(0, 0, 0, 0.4),
-    0 1px 3px rgba(0, 0, 0, 0.3);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4), 0 -1px 1px rgba(0, 0, 0, 0.45);
+    0 4px 10px rgba(0, 0, 0, 0.38),
+    0 1px 3px rgba(0, 0, 0, 0.28);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .brass-screw {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #F5DE9B, #9E7428 70%, #5C4113 100%);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(255, 255, 255, 0.4);
@@ -135,32 +136,47 @@ html.dark .plaster-wall {
 .door-fluting {
   background-image: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.07) 0px,
-    rgba(255, 255, 255, 0.07) 1px,
+    rgba(255, 255, 255, 0.065) 0px,
+    rgba(255, 255, 255, 0.065) 1px,
     transparent 1px,
     transparent 7px,
-    rgba(0, 0, 0, 0.2) 7px,
-    rgba(0, 0, 0, 0.2) 8px
+    rgba(0, 0, 0, 0.22) 7px,
+    rgba(0, 0, 0, 0.22) 8px
   );
 }
 
-/* Door Double Arch White Trim */
+/* Door Double Arch Trim */
 .door-arch-outer {
   border-top-left-radius: 9999px;
   border-top-right-radius: 9999px;
-  background: linear-gradient(180deg, #FBF9F6 0%, #ECE7DF 50%, #DBD4C8 100%);
+  background: linear-gradient(180deg, #FDFBF9 0%, #EFEAE2 50%, #DED7CB 100%);
   box-shadow: 
-    0 8px 22px -4px rgba(0, 0, 0, 0.16),
+    0 10px 26px -6px rgba(0, 0, 0, 0.18),
     0 2px 6px rgba(0, 0, 0, 0.08),
     inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.9);
+  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+html.dark .door-arch-outer {
+  background: linear-gradient(180deg, #2C2E39 0%, #22242D 50%, #191B22 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 12px 30px -6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
 }
 
 .door-arch-inner {
   border-top-left-radius: 9999px;
   border-top-right-radius: 9999px;
   background: linear-gradient(180deg, #E6E1D8 0%, #D4CDC2 100%);
-  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.22), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: background 0.5s ease;
+}
+
+html.dark .door-arch-inner {
+  background: linear-gradient(180deg, #181A20 0%, #101217 100%);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.65);
 }
 
 /* Gold Lever Handle */

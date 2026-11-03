@@ -8,20 +8,21 @@ import { useTheme } from '../providers/ThemeProvider';
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Web Development', href: '/web-developer' },
-  { label: 'App Development', href: '/app-developer' },
+  { label: 'Web Dev', href: '/web-developer' },
+  { label: 'App Dev', href: '/app-developer' },
   { label: 'Business Systems', href: '/business-systems' },
   { label: 'AI & GIS', href: '/ai-gis' },
-  { label: 'Event & Digital Ops', href: '/event-digital-ops' },
-  { label: 'My story', href: '/#story-timeline' },
+  { label: 'Event Ops', href: '/event-digital-ops' },
+  { label: 'My Story', href: '/#story-timeline' },
   { label: 'Contact', href: '#contact-cta' },
 ];
 
 export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
   const pathname = usePathname();
   const { isDark } = useTheme();
-  const { triggerWalkThrough } = useDoorTransition();
+  const { triggerWalkThrough, triggerDoorReturn } = useDoorTransition();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Live user timezone clock with minute interval, rendered after mount to prevent hydration mismatch
   const [timeString, setTimeString] = useState<string>('');
@@ -34,7 +35,7 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
         .toLowerCase();
       const datePart = now.toLocaleDateString([], {
         day: 'numeric',
-        month: 'long',
+        month: 'short',
         year: 'numeric',
       });
       setTimeString(`${timePart} · ${datePart}`);
@@ -45,6 +46,13 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const handleLinkClick = (href: string, e: React.MouseEvent) => {
     setMobileMenuOpen(false);
     if (href === '#contact-cta') {
@@ -53,33 +61,79 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
       return;
     }
 
+    if (href === '/' && pathname !== '/') {
+      e.preventDefault();
+      triggerDoorReturn('/');
+      return;
+    }
+
+    if (href === '/#story-timeline' && pathname === '/') {
+      e.preventDefault();
+      const el = document.getElementById('story-timeline');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
     if (href.startsWith('/') && href !== '/' && !href.includes('#')) {
       e.preventDefault();
-      triggerWalkThrough(href);
+      if (pathname !== href) {
+        triggerWalkThrough(href);
+      }
     }
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40 px-6 sm:px-10 lg:px-16 py-4 pointer-events-none transition-all">
-      <div className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
+    <header className="fixed top-0 inset-x-0 z-40 px-4 sm:px-8 lg:px-14 py-3.5 pointer-events-none transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 pointer-events-auto">
         
-        {/* CENTERED NAVIGATION LINKS */}
+        {/* MOBILE / TABLET BRAND PILL (Visible when full nav bar is collapsed) */}
+        <a
+          href="/"
+          onClick={(e) => handleLinkClick('/', e)}
+          className={`xl:hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-full backdrop-blur-md border text-xs font-semibold tracking-tight transition-all shadow-xs ${
+            isDark
+              ? 'bg-[#181920]/85 border-[#2E313D] text-[#FAF7F2]'
+              : 'bg-[#FAF8F5]/85 border-[#D6CFC7] text-[#181615]'
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Albert Christian</span>
+        </a>
+
+        {/* DESKTOP FLOATING GLASS NAVIGATION PILL */}
         <nav
           aria-label="Main Navigation"
-          className="hidden xl:flex items-center gap-7 text-xs sm:text-[13px] font-medium"
+          className={`hidden xl:inline-flex items-center gap-1 p-1.5 rounded-full backdrop-blur-md border transition-all duration-300 ${
+            isDark
+              ? scrolled
+                ? 'bg-[#15171E]/90 border-[#2E313D] shadow-[0_10px_30px_rgba(0,0,0,0.45)]'
+                : 'bg-[#181920]/65 border-[#2C2F3A]/80 shadow-sm'
+              : scrolled
+              ? 'bg-[#FAF8F5]/90 border-[#D5CEC6] shadow-[0_10px_30px_rgba(24,22,21,0.08)]'
+              : 'bg-white/60 border-[#D8D1C9]/80 shadow-2xs'
+          }`}
         >
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
+            const isContact = link.href === '#contact-cta';
 
             return (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleLinkClick(link.href, e)}
-                className={`transition-colors cursor-pointer hover:text-[#6B3A3F] ${
-                  isActive
-                    ? isDark ? 'font-bold text-white' : 'font-bold text-[#1A1818]'
-                    : isDark ? 'text-[#9E978F] hover:text-white' : 'text-[#6E6464] hover:text-[#1A1818]'
+                className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                  isContact
+                    ? isDark
+                      ? 'ml-1 bg-amber-300 text-[#14151B] font-semibold hover:bg-amber-200 shadow-2xs'
+                      : 'ml-1 bg-[#181615] text-[#FAF8F5] font-semibold hover:bg-[#2E2A28] shadow-2xs'
+                    : isActive
+                    ? isDark
+                      ? 'bg-white/12 text-white font-semibold shadow-2xs'
+                      : 'bg-[#181615]/10 text-[#181615] font-semibold'
+                    : isDark
+                    ? 'text-[#A8A096] hover:text-white hover:bg-white/5'
+                    : 'text-[#5C554E] hover:text-[#181615] hover:bg-black/5'
                 }`}
               >
                 {link.label}
@@ -88,24 +142,30 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
           })}
         </nav>
 
-        {/* RIGHT PILL: LOCAL TIME */}
-        <div className="flex items-center gap-3 ml-auto pr-16 sm:pr-24">
+        {/* RIGHT PILL: LOCAL TIME + MOBILE MENU TRIGGER */}
+        <div className="flex items-center gap-2.5 ml-auto pr-12 sm:pr-16">
           <div
             suppressHydrationWarning
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-xs border text-xs font-mono shadow-2xs transition-colors duration-500 ${
+            className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full backdrop-blur-md border text-[11px] sm:text-xs font-mono transition-all duration-300 ${
               isDark
-                ? 'bg-black/50 border-[#323440] text-[#C4BCB3]'
-                : 'bg-white/45 border-[#D5CDCA] text-[#544E49]'
+                ? scrolled
+                  ? 'bg-[#15171E]/90 border-[#2E313D] text-[#C4BCB3] shadow-md'
+                  : 'bg-[#181920]/65 border-[#2C2F3A] text-[#C4BCB3]'
+                : scrolled
+                ? 'bg-[#FAF8F5]/90 border-[#D5CEC6] text-[#5C554E] shadow-sm'
+                : 'bg-white/60 border-[#D8D1C9] text-[#5C554E]'
             }`}
             aria-live="polite"
           >
-            <span className={isDark ? 'text-[#8C847C]' : 'text-[#857878]'}>Local time</span>
-            <span className={`font-bold tabular-nums ${isDark ? 'text-amber-200' : 'text-[#1A1818]'}`}>
-              {timeString ? timeString.split(' · ')[0] : '11:39am'}
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+            <span className="hidden md:inline opacity-75">Pekanbaru</span>
+            <span className="hidden md:inline opacity-40">·</span>
+            <span className={`font-bold tabular-nums ${isDark ? 'text-amber-200' : 'text-[#181615]'}`}>
+              {timeString ? timeString.split(' · ')[0] : '11:45am'}
             </span>
-            <span className="text-[#857878]">·</span>
-            <span className={`font-medium ${isDark ? 'text-[#DDD6CC]' : 'text-[#544E49]'}`}>
-              {timeString ? timeString.split(' · ')[1] : '2 November, 2026'}
+            <span className="hidden sm:inline opacity-40">·</span>
+            <span className={`hidden sm:inline font-medium ${isDark ? 'text-[#DDD6CC]' : 'text-[#5C554E]'}`}>
+              {timeString ? timeString.split(' · ')[1] : '3 Nov 2026'}
             </span>
           </div>
 
@@ -114,10 +174,10 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            className={`xl:hidden p-2 rounded-full border transition-colors cursor-pointer ${
+            className={`xl:hidden p-2 rounded-full border backdrop-blur-md transition-colors cursor-pointer ${
               isDark
-                ? 'bg-black/60 border-[#323440] text-white hover:bg-black'
-                : 'bg-white/70 border-[#D5CDCA] text-[#1A1818] hover:bg-white'
+                ? 'bg-[#181920]/85 border-[#2E313D] text-white hover:bg-[#242630]'
+                : 'bg-[#FAF8F5]/85 border-[#D6CFC7] text-[#181615] hover:bg-white'
             }`}
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -127,11 +187,13 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className={`xl:hidden mt-3 p-5 rounded-3xl border shadow-2xl flex flex-col gap-2.5 pointer-events-auto transition-colors duration-500 ${
-          isDark
-            ? 'bg-[#181920] border-[#323440]'
-            : 'bg-[#FAF8F5] border-[#D5CDCA]'
-        }`}>
+        <div
+          className={`xl:hidden mt-2.5 max-w-md ml-auto mr-12 sm:mr-16 p-4 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col gap-1.5 pointer-events-auto transition-colors duration-300 ${
+            isDark
+              ? 'bg-[#161820]/95 border-[#2E313D]'
+              : 'bg-[#FAF8F5]/95 border-[#D6CFC7]'
+          }`}
+        >
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -139,13 +201,18 @@ export function HeaderNav({ onOpenContact }: { onOpenContact: () => void }) {
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleLinkClick(link.href, e)}
-                className={`px-4 py-2 rounded-xl text-xs font-mono transition-all ${
+                className={`px-4 py-2.5 rounded-xl text-xs font-mono transition-all flex items-center justify-between ${
                   isActive
-                    ? isDark ? 'bg-amber-300 text-black font-bold' : 'bg-[#1A1818] text-white font-bold'
-                    : isDark ? 'text-[#A8A196] hover:bg-white/10 hover:text-white' : 'text-[#544E49] hover:bg-white hover:text-[#1A1818]'
+                    ? isDark
+                      ? 'bg-amber-300 text-[#14151B] font-bold'
+                      : 'bg-[#181615] text-white font-bold'
+                    : isDark
+                    ? 'text-[#C4BCB3] hover:bg-white/10 hover:text-white'
+                    : 'text-[#5C554E] hover:bg-black/5 hover:text-[#181615]'
                 }`}
               >
-                {link.label}
+                <span>{link.label}</span>
+                {isActive && <span className="text-[10px] opacity-75">ACTIVE</span>}
               </a>
             );
           })}

@@ -5,6 +5,7 @@ import { ProjectCard } from '@/data/doorsData';
 import { X, ExternalLink, CheckCircle2, Calendar, Layers } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/SocialIcons';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../providers/ThemeProvider';
 
 interface ModalProps {
   project: ProjectCard | null;
@@ -12,14 +13,13 @@ interface ModalProps {
 }
 
 export function ProjectDetailModal({ project, onClose }: ModalProps) {
+  const { isDark } = useTheme();
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Esc key listener and focus trap
   useEffect(() => {
     if (!project) return;
 
-    // Focus close button on open
     setTimeout(() => {
       closeButtonRef.current?.focus();
     }, 50);
@@ -30,7 +30,6 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
         return;
       }
 
-      // Simple focus trap
       if (e.key === 'Tab' && modalRef.current) {
         const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -73,26 +72,38 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#1A1818]/60 backdrop-blur-xs"
+            className="fixed inset-0 bg-black/65 backdrop-blur-sm"
           />
 
           {/* Modal Container */}
           <motion.div
             ref={modalRef}
-            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            initial={{ opacity: 0, scale: 0.96, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 15 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#FAF8F5] border border-[#D9D4CE] shadow-2xl p-6 sm:p-8"
+            exit={{ opacity: 0, scale: 0.96, y: 12 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className={`relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border shadow-2xl p-6 sm:p-8 ${
+              isDark
+                ? 'bg-[#181A22] border-[#2C2F3C] text-[#FAF7F2]'
+                : 'bg-[#FAF8F5] border-[#D8D1C7] text-[#181615]'
+            }`}
           >
             {/* Top Bar */}
-            <div className="flex items-center justify-between border-b border-[#E6E2DC] pb-4 mb-6">
+            <div
+              className={`flex items-center justify-between border-b pb-4 mb-6 ${
+                isDark ? 'border-white/10' : 'border-[#E6E0D6]'
+              }`}
+            >
               <div className="flex items-center gap-2">
                 <span
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: project.accentColor }}
                 />
-                <span className="font-mono text-xs uppercase tracking-widest text-[#6B3A3F] font-bold">
+                <span
+                  className={`font-mono text-xs uppercase tracking-[0.18em] font-bold ${
+                    isDark ? 'text-amber-300' : 'text-[#6B3A3F]'
+                  }`}
+                >
                   {project.category}
                 </span>
               </div>
@@ -101,46 +112,68 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
                 ref={closeButtonRef}
                 onClick={onClose}
                 aria-label="Close modal dialog"
-                className="p-2 rounded-full bg-white border border-[#D9D4CE] text-[#1A1818] hover:bg-[#E6E2DC] transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#6B3A3F]"
+                className={`p-2 rounded-full border transition-all cursor-pointer ${
+                  isDark
+                    ? 'bg-[#12141B] border-[#2C2F3C] text-white hover:bg-white/10'
+                    : 'bg-white border-[#D8D1C7] text-[#181615] hover:bg-[#EAE4DC]'
+                }`}
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Title & Metadata */}
             <h3
               id="modal-project-title"
-              className="text-2xl sm:text-3xl font-extrabold text-[#1A1818] tracking-tight mb-2"
+              className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2"
             >
               {project.title}
             </h3>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#544E49] mb-6">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-[#6B3A3F]" />
+            <div
+              className={`flex flex-wrap items-center gap-3 text-xs font-mono mb-6 ${
+                isDark ? 'text-[#ACA49A]' : 'text-[#544E49]'
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-[#6B3A3F] dark:text-amber-300" />
                 {project.year}
               </span>
               <span>·</span>
-              <span className="flex items-center gap-1">
-                <Layers className="w-3.5 h-3.5 text-[#1F2F55]" />
+              <span className="flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-[#1D3254] dark:text-amber-200" />
                 {project.tags.join(', ')}
               </span>
             </div>
 
             {/* Detailed Description */}
             <div className="mb-6">
-              <h4 className="font-mono text-xs uppercase tracking-wider text-[#7C6C5E] font-semibold mb-2">
+              <h4
+                className={`font-mono text-xs uppercase tracking-wider font-semibold mb-2 ${
+                  isDark ? 'text-[#9E968C]' : 'text-[#7C6C5E]'
+                }`}
+              >
                 Overview &amp; Architecture
               </h4>
-              <p className="text-sm sm:text-base text-[#1A1818]/90 leading-relaxed">
+              <p
+                className={`text-sm sm:text-base leading-relaxed ${
+                  isDark ? 'text-[#DFD8CF]' : 'text-[#181615]/90'
+                }`}
+              >
                 {project.detailedDescription}
               </p>
             </div>
 
             {/* Metrics Callout */}
             {project.metrics && (
-              <div className="mb-6 p-3.5 rounded-xl bg-white border border-[#D9D4CE] flex items-center gap-2.5 text-xs font-mono font-medium text-[#1F2F55]">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <div
+                className={`mb-6 p-3.5 rounded-xl border flex items-center gap-2.5 text-xs font-mono font-medium ${
+                  isDark
+                    ? 'bg-[#12141B] border-[#2C2F3C] text-amber-200'
+                    : 'bg-white border-[#D8D1C7] text-[#1D3254]'
+                }`}
+              >
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                 <span>
                   <strong>Key Metric / Impact:</strong> {project.metrics}
                 </span>
@@ -149,14 +182,22 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
 
             {/* Tech Stack List */}
             <div className="mb-8">
-              <h4 className="font-mono text-xs uppercase tracking-wider text-[#7C6C5E] font-semibold mb-2">
+              <h4
+                className={`font-mono text-xs uppercase tracking-wider font-semibold mb-2.5 ${
+                  isDark ? 'text-[#9E968C]' : 'text-[#7C6C5E]'
+                }`}
+              >
                 Tech &amp; Tools Used
               </h4>
               <div className="flex flex-wrap gap-2">
                 {project.tech.map((t, idx) => (
                   <span
                     key={idx}
-                    className="px-2.5 py-1 rounded-md bg-white border border-[#D9D4CE] text-xs font-mono font-medium text-[#1A1818]"
+                    className={`px-3 py-1 rounded-lg border text-xs font-mono font-medium ${
+                      isDark
+                        ? 'bg-[#12141B] border-[#2C2F3C] text-[#FAF7F2]'
+                        : 'bg-white border-[#D8D1C7] text-[#181615]'
+                    }`}
                   >
                     {t}
                   </span>
@@ -165,13 +206,21 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
             </div>
 
             {/* Action Links */}
-            <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-[#E6E2DC]">
+            <div
+              className={`flex flex-wrap items-center gap-3 pt-4 border-t ${
+                isDark ? 'border-white/10' : 'border-[#E6E0D6]'
+              }`}
+            >
               {project.links?.live && (
                 <a
                   href={project.links.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 px-5 rounded-xl bg-[#1F2F55] hover:bg-[#15223E] text-white text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+                  className={`py-2.5 px-5 rounded-xl text-xs font-mono uppercase tracking-wider font-bold transition-all flex items-center gap-2 shadow-xs cursor-pointer ${
+                    isDark
+                      ? 'bg-amber-300 hover:bg-amber-200 text-[#14151B]'
+                      : 'bg-[#1D3254] hover:bg-[#15223E] text-white'
+                  }`}
                 >
                   <span>Visit Live Project</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -183,7 +232,11 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
                   href={project.links.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 px-5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#D9D4CE] text-[#1A1818] text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+                  className={`py-2.5 px-5 rounded-xl border text-xs font-mono uppercase tracking-wider font-semibold transition-all flex items-center gap-2 shadow-2xs cursor-pointer ${
+                    isDark
+                      ? 'bg-[#12141B] hover:bg-white/10 border-[#2C2F3C] text-white'
+                      : 'bg-white hover:bg-[#EAE4DC] border-[#D8D1C7] text-[#181615]'
+                  }`}
                 >
                   <GithubIcon className="w-3.5 h-3.5" />
                   <span>View Repository</span>
@@ -193,7 +246,11 @@ export function ProjectDetailModal({ project, onClose }: ModalProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="ml-auto py-2.5 px-5 rounded-xl text-xs font-mono uppercase tracking-wider text-[#544E49] hover:text-[#1A1818] cursor-pointer"
+                className={`ml-auto py-2.5 px-5 rounded-xl text-xs font-mono uppercase tracking-wider cursor-pointer ${
+                  isDark
+                    ? 'text-[#ACA49A] hover:text-white'
+                    : 'text-[#544E49] hover:text-[#181615]'
+                }`}
               >
                 Close
               </button>

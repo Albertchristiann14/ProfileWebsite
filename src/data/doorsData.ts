@@ -40,16 +40,16 @@ export const DOORS_DATA: DoorItem[] = [
     title: 'Web Development',
     subtitle: 'END TO END, FROM SKETCH TO LIVE SITE',
     plateText: 'WEB DEVELOPER',
-    themeColor: '#1D3254', // Navy blue, matching Screenshot 1 & 2
+    themeColor: '#1D3254',
     glowColor: 'rgba(56, 189, 248, 0.4)',
     doorDepthColor: '#0E1B31',
     description: 'Engineering responsive, accessible, high-performance web applications with Next.js, React, and modern full-stack architectures.',
     checklist: [
-      'Discovery & planning',
-      'UX & visual design',
-      'Front-end & back-end development',
-      'Technical SEO & performance',
-      'Analytics, launch & ongoing support'
+      'Discovery & system architecture',
+      'UI/UX & responsive visual design',
+      'Full-stack Next.js & React engineering',
+      'Technical SEO & Lighthouse 95+ speed',
+      'Analytics, deployment & ongoing support'
     ]
   },
   {
@@ -57,16 +57,16 @@ export const DOORS_DATA: DoorItem[] = [
     route: '/app-developer',
     doorNumber: '02',
     title: 'App Development',
-    subtitle: 'NATIVE & HYBRID MOBILE APPS',
+    subtitle: 'NATIVE & CROSS-PLATFORM MOBILE APPS',
     plateText: 'APP DEVELOPER',
-    themeColor: '#46293B', // Plum burgundy, matching Screenshot 1 & 2
+    themeColor: '#46293B',
     glowColor: 'rgba(192, 132, 252, 0.4)',
     doorDepthColor: '#281521',
     description: 'Crafting native Android experiences in modern Kotlin with clean architecture, real-time Firebase services, and Play Store delivery.',
     checklist: [
-      'Product scoping & architecture',
-      'Kotlin native development & Flutter',
-      'Firebase auth, database & notifications',
+      'Product scoping & mobile architecture',
+      'Kotlin native & Jetpack development',
+      'Firebase Auth, Firestore & messaging',
       'Offline-first local caching & SQLite',
       'Play Store readiness & maintenance'
     ]
@@ -75,58 +75,58 @@ export const DOORS_DATA: DoorItem[] = [
     id: 'business-systems',
     route: '/business-systems',
     doorNumber: '03',
-    title: 'UI/UX Design',
-    subtitle: 'INTUITIVE & PURPOSEFUL INTERFACES',
-    plateText: 'UI/UX DESIGNER',
-    themeColor: '#576F5B', // Sage olive green, matching Screenshot 1 & 2
+    title: 'Business Systems',
+    subtitle: 'ERP, HRMS & INTERNAL ENTERPRISE TOOLS',
+    plateText: 'BUSINESS SYSTEMS',
+    themeColor: '#576F5B',
     glowColor: 'rgba(74, 222, 128, 0.4)',
     doorDepthColor: '#2F4033',
     description: 'Custom hospitality, HRMS, and enterprise operations management platforms built under Krevia Digital. "Build Smarter. Operate Better."',
     quote: 'Krevia Digital: "Build Smarter. Operate Better."',
     checklist: [
-      'User research & workflow mapping',
-      'Wireframing & interactive prototypes',
-      'Design systems & micro-interactions',
-      'Usability testing & heuristic reviews',
-      'Developer handoff & design QA'
-    ]
-  },
-  {
-    id: 'event-digital-ops',
-    route: '/event-digital-ops',
-    doorNumber: '04',
-    title: 'Graphic Design',
-    subtitle: 'BRAND IDENTITY & DIGITAL CREATIVES',
-    plateText: 'GRAPHIC DESIGNER',
-    themeColor: '#9E4F25', // Warm terracotta / cognac brown, matching Screenshot 1 & 2
-    glowColor: 'rgba(251, 146, 60, 0.4)',
-    doorDepthColor: '#55260F',
-    description: 'Seamless technology coordination, videotron live operations, stage management, and digital marketing execution for major conferences and runs.',
-    checklist: [
-      'Brand visual identity & guidelines',
-      'Social media carousels & campaign assets',
-      'Vector illustration & marketing design',
-      'Stage videotron visuals & motion timing',
-      'Production-ready print & web exports'
+      'Multi-role RBAC & workflow mapping',
+      'HRMS attendance, shifts & payroll',
+      'IT Helpdesk & asset lifecycle tracking',
+      'Modular POS & inventory pipelines',
+      'Database design & cloud deployment'
     ]
   },
   {
     id: 'ai-gis',
     route: '/ai-gis',
-    doorNumber: '05',
+    doorNumber: '04',
     title: 'AI & GIS Systems',
-    subtitle: 'DATA THAT EXPLAINS ITSELF',
+    subtitle: 'SPATIAL INTELLIGENCE & APPLIED ML',
     plateText: 'AI & GIS SYSTEMS',
-    themeColor: '#162C42',
-    glowColor: 'rgba(20, 184, 166, 0.35)',
-    doorDepthColor: '#0E1E2E',
+    themeColor: '#1E464B',
+    glowColor: 'rgba(45, 212, 191, 0.4)',
+    doorDepthColor: '#0E2427',
     description: 'Geospatial intelligence with practical deep learning — from municipal waste WebGIS to AI invoice parsing and inventory forecasting.',
     checklist: [
-      'Data modelling & spatial pipelines',
-      'Map-based dashboards & Leaflet/Mapbox',
-      'AI-assisted automation',
-      'Smart parsing & validation',
-      'Deployment & documentation'
+      'Spatial GeoJSON & OpenLayers pipelines',
+      'Interactive urban zoning dashboards',
+      'Time-series demand forecasting (MAPE <15%)',
+      'Smart client-side NLP token parsing',
+      'FastAPI & PyTorch model serving'
+    ]
+  },
+  {
+    id: 'event-digital-ops',
+    route: '/event-digital-ops',
+    doorNumber: '05',
+    title: 'Event & Digital Ops',
+    subtitle: 'LIVE VISUAL PRODUCTION & STAGE TECH',
+    plateText: 'EVENT & OPS',
+    themeColor: '#9E4F25',
+    glowColor: 'rgba(251, 146, 60, 0.4)',
+    doorDepthColor: '#55260F',
+    description: 'Seamless technology coordination, videotron live operations, stage management, and digital marketing execution for major conferences and runs.',
+    checklist: [
+      'High-res LED videotron live switching',
+      'Showflow cues & stage A/V synchronization',
+      'Digital campaign & visual collateral',
+      'Tournament finance & registration ops',
+      'Crowd logistics for 1,000–3,000 attendees'
     ]
   }
 ];
