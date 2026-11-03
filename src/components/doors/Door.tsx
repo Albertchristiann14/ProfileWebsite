@@ -41,15 +41,15 @@ export function Door({
     }
   };
 
-  // Determine door rotation: open slightly on hover/active, or wide open on walkthrough
+  // Determine door rotation: open wider on hover/active to reveal the layered interior room, or wide open on walkthrough
   let rotation = 0;
   if (
     isCurrentWalkingDoor &&
     (walkThroughPhase === 'swing' || walkThroughPhase === 'zoom' || walkThroughPhase === 'flash')
   ) {
-    rotation = -82; // Fully swung open for walk-through
+    rotation = -84; // Fully swung open for walk-through
   } else if (isActive) {
-    rotation = -24; // Swung open on hover/active
+    rotation = -38; // Swung open on hover/active to reveal stacked interior cards
   }
 
   return (
@@ -85,15 +85,97 @@ export function Door({
       <div className="door-arch-outer relative w-full h-full p-2.5 flex flex-col items-center">
         {/* INNER ARCH FRAME (Recessed casing) */}
         <div className="door-arch-inner relative w-full h-full p-1.5 flex flex-col justify-end overflow-hidden">
-          {/* DOORWAY INTERIOR / ROOM BEYOND (Revealed when door swings open) */}
+          {/* DOORWAY INTERIOR / ROOM BEYOND (Revealed when door swings open: 3D Stacked / Overlapping Cards!) */}
           <div
-            className="absolute inset-0 z-0 flex flex-col items-center justify-center p-4 text-center pointer-events-none"
+            className="absolute inset-0 z-0 flex flex-col items-center justify-between p-3 text-center pointer-events-none overflow-hidden rounded-t-[125px]"
             style={{
-              background: `radial-gradient(ellipse at 35% 45%, #FFFDF5 0%, #F5DE9B 42%, ${door.doorDepthColor} 100%)`,
+              background: `radial-gradient(ellipse at 55% 30%, #FFFDF7 0%, #F5DFA0 38%, ${door.doorDepthColor} 95%)`,
             }}
           >
-            {/* Warm room light spill */}
-            <div className="w-full h-full opacity-35 bg-gradient-to-b from-amber-200/40 via-transparent to-black/40" />
+            {/* Ceiling Spotlight Ray & Perspective Grid */}
+            <div
+              className="absolute inset-0 opacity-35"
+              style={{
+                backgroundImage:
+                  'linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.22) 1px, transparent 1px)',
+                backgroundSize: '18px 18px',
+              }}
+            />
+            <div className="w-24 h-28 bg-gradient-to-b from-white/80 via-amber-200/30 to-transparent blur-md -mt-4" />
+
+            {/* 3 OVERLAPPING / STACKING CARDS FLOATING INSIDE THE ROOM */}
+            <div className="relative w-full h-48 flex items-center justify-center my-auto">
+              {/* Back Card (Layer 3 - Tilted Left) */}
+              <div
+                className={`absolute w-28 h-32 rounded-xl bg-[#181A22]/85 border border-white/25 p-2 shadow-lg transition-all duration-500 ease-out ${
+                  isActive
+                    ? 'translate-x-3 -translate-y-5 -rotate-12 scale-100 opacity-90'
+                    : 'translate-x-1 -translate-y-2 -rotate-6 scale-90 opacity-60'
+                }`}
+              >
+                <div className="w-8 h-1.5 rounded-full bg-white/30 mb-1.5" />
+                <div className="w-full h-12 rounded-md bg-white/10 border border-white/10 mb-1.5" />
+                <div className="w-16 h-1.5 rounded-full bg-amber-300/50" />
+              </div>
+
+              {/* Middle Card (Layer 2 - Tilted Right, overlapping Layer 3) */}
+              <div
+                className={`absolute w-29 h-32 rounded-xl bg-white/90 border border-[#D8CFC4] p-2.5 shadow-xl transition-all duration-500 delay-75 ease-out ${
+                  isActive
+                    ? 'translate-x-6 translate-y-1 rotate-8 scale-100 opacity-95'
+                    : 'translate-x-2 translate-y-0 rotate-3 scale-90 opacity-75'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: door.themeColor }}
+                  />
+                  <span className="text-[7px] font-mono font-bold text-[#5C554E]">
+                    ROOM {door.doorNumber}
+                  </span>
+                </div>
+                <div
+                  className="w-full h-11 rounded-md mb-1.5 opacity-85"
+                  style={{ backgroundColor: door.themeColor }}
+                />
+                <div className="w-14 h-1.5 rounded-full bg-[#181615]/30 mb-1" />
+                <div className="w-10 h-1.5 rounded-full bg-[#181615]/15" />
+              </div>
+
+              {/* Front Card (Layer 1 - Hero Floating Card overlapping both) */}
+              <div
+                className={`relative z-10 w-30 h-32 rounded-xl bg-[#14151B]/95 border border-amber-300/45 p-2.5 shadow-[0_14px_28px_rgba(0,0,0,0.6)] flex flex-col justify-between text-left transition-all duration-500 delay-100 ease-out ${
+                  isActive
+                    ? 'translate-x-4 translate-y-5 -rotate-2 scale-105 opacity-100'
+                    : 'translate-x-1 translate-y-2 rotate-0 scale-95 opacity-85'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="px-1.5 py-0.5 rounded bg-amber-300/20 text-amber-300 font-mono text-[7px] font-bold">
+                    STACK
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+
+                <div>
+                  <div className="text-[9px] font-extrabold text-white leading-tight line-clamp-2">
+                    {door.title}
+                  </div>
+                  <div className="text-[7px] font-mono text-white/60 mt-0.5 truncate">
+                    {door.checklist[0]}
+                  </div>
+                </div>
+
+                <div className="pt-1 border-t border-white/10 flex items-center justify-between text-[7px] font-mono text-amber-300 font-bold">
+                  <span>STEP INSIDE</span>
+                  <span>→</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Room Floor Perspective Strip */}
+            <div className="w-full h-10 bg-gradient-to-t from-black/65 via-black/25 to-transparent -mb-3" />
           </div>
 
           {/* 3D DOOR LEAF (The physical swinging wooden door) */}
