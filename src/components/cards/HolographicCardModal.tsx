@@ -1,20 +1,24 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
-import { X, Sparkles, GraduationCap, Building2 } from 'lucide-react';
+import { X, Sparkles, GraduationCap, Building2, ShieldCheck, Zap, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function HolographicCardModal({ isOpen, onClose }: ModalProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
+const STATS = [
+  { label: 'Web Systems (Next.js / React)', val: 98, color: 'from-amber-400 to-amber-200' },
+  { label: 'Native Android (Kotlin / Jetpack)', val: 94, color: 'from-emerald-400 to-emerald-200' },
+  { label: 'ERP & Business Backends', val: 92, color: 'from-cyan-400 to-cyan-200' },
+  { label: 'Creative UI / 3D & Shaders', val: 96, color: 'from-rose-400 to-amber-300' },
+];
 
+export function HolographicCardModal({ isOpen, onClose }: ModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -25,149 +29,196 @@ export function HolographicCardModal({ isOpen, onClose }: ModalProps) {
     }
   }, [isOpen, onClose]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = ((y - centerY) / centerY) * -16;
-    const rotateY = ((x - centerX) / centerX) * 16;
-
-    setTilt({ x: rotateX, y: rotateY });
-    setGlare({
-      x: (x / rect.width) * 100,
-      y: (y / rect.height) * 100,
-      opacity: 0.35,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-    setGlare({ x: 50, y: 50, opacity: 0 });
-  };
-
   return (
     <AnimatePresence>
       {isOpen && (
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Albert Christian 3D Ability Card"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          aria-label="Albert Christian Holographic Ability Card"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
         >
-          {/* Dark Backdrop with Warm Ambient Glow */}
+          {/* Cinematic Dark Ambient Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 bg-black/85 backdrop-blur-xl"
           />
 
-          {/* Close button */}
-          <button
+          {/* Close Floating Pill */}
+          <motion.button
             type="button"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             onClick={onClose}
             aria-label="Close card view"
-            className="fixed top-6 right-6 z-50 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer"
+            className="fixed top-5 right-5 sm:top-7 sm:right-8 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 backdrop-blur-md transition-all shadow-xl cursor-pointer"
           >
-            <X className="w-6 h-6" />
-          </button>
+            <span className="text-xs font-mono font-medium">ESC</span>
+            <X className="w-4 h-4" />
+          </motion.button>
 
-          {/* 3D Tilted Card Container */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="relative z-10 select-none"
-            style={{ perspective: '1200px' }}
-          >
-            <div
-              ref={cardRef}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="relative w-[320px] sm:w-[380px] h-[520px] sm:h-[580px] rounded-[32px] p-6 bg-gradient-to-b from-[#252222] via-[#1A1818] to-[#110F0F] border-2 border-[#D4C8B8]/30 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.9)] flex flex-col justify-between overflow-hidden cursor-grab active:cursor-grabbing transition-transform duration-100 ease-out"
-              style={{
-                transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                transformStyle: 'preserve-3d',
-              }}
-            >
-              {/* Foil Specular Sheen */}
+          {/* 3D Card Interactive Stage */}
+          <CardContainer className="inter-var py-6 sm:py-10 max-h-[92vh]">
+            <CardBody className="relative group/card w-[340px] sm:w-[410px] h-auto rounded-[32px] p-5 sm:p-6 bg-gradient-to-b from-[#1C1A22] via-[#131217] to-[#0B0A0E] border-2 border-[#D8B46E]/40 shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_40px_rgba(216,180,110,0.15)] flex flex-col justify-between overflow-hidden">
+              
+              {/* CORNER RIVETS / PHYSICAL COLLECTIBLE SCREWS */}
+              <div className="absolute top-3 left-3 w-2 h-2 rounded-full border border-[#D8B46E]/60 bg-[#5A4016] shadow-inner" />
+              <div className="absolute top-3 right-3 w-2 h-2 rounded-full border border-[#D8B46E]/60 bg-[#5A4016] shadow-inner" />
+              <div className="absolute bottom-3 left-3 w-2 h-2 rounded-full border border-[#D8B46E]/60 bg-[#5A4016] shadow-inner" />
+              <div className="absolute bottom-3 right-3 w-2 h-2 rounded-full border border-[#D8B46E]/60 bg-[#5A4016] shadow-inner" />
+
+              {/* HOLOGRAPHIC PRISMATIC SHIMMER OVERLAY (Reacts to hover) */}
               <div
-                className="pointer-events-none absolute inset-0 rounded-[32px] transition-opacity duration-200"
+                className="pointer-events-none absolute inset-0 z-30 opacity-30 group-hover/card:opacity-75 transition-opacity duration-700 mix-blend-color-dodge rounded-[32px]"
                 style={{
-                  background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255, 230, 168, 0.45) 0%, rgba(255, 120, 180, 0.2) 30%, transparent 65%)`,
-                  opacity: glare.opacity,
-                  mixBlendMode: 'color-dodge',
+                  background:
+                    'linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.15) 35%, rgba(245,158,11,0.25) 45%, rgba(56,189,248,0.25) 55%, rgba(236,72,153,0.2) 65%, transparent 80%)',
+                  backgroundSize: '200% 200%',
                 }}
               />
 
-              {/* CARD TOP BAR */}
-              <div className="flex items-center justify-between border-b border-white/15 pb-3">
+              {/* CARD HEADER (Z-Depth 40) */}
+              <CardItem
+                translateZ="40"
+                className="w-full flex items-center justify-between border-b border-white/10 pb-3"
+              >
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#6B3A3F]" />
-                  <span className="font-mono text-xs uppercase tracking-widest font-bold text-white">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse ring-4 ring-amber-400/20" />
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-white">
                     ABILITY CARD
                   </span>
-                </div>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-amber-200/80 font-semibold">
-                  EDITION 01 · 2026
-                </span>
-              </div>
-
-              {/* PHOTO FRAME */}
-              <div className="relative w-full h-[260px] rounded-2xl overflow-hidden border border-white/20 bg-[#121111] shadow-inner">
-                <Image
-                  src="/character/albert_photo.jpg"
-                  alt="Albert Christian"
-                  fill
-                  sizes="380px"
-                  className="object-cover object-top"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <span className="text-white font-mono font-bold text-sm tracking-wider bg-black/60 px-3 py-1 rounded-full border border-white/20">
-                    Albert Christian
-                  </span>
-                  <span className="bg-[#6B3A3F] text-amber-200 text-xs font-mono font-bold px-2.5 py-1 rounded-full">
-                    Founder
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-400/15 border border-amber-400/30 text-amber-300">
+                    S-TIER
                   </span>
                 </div>
-              </div>
 
-              {/* STATS & METRICS */}
-              <div className="space-y-2.5 pt-2">
-                <div className="flex items-center justify-between bg-white/5 p-2.5 rounded-xl border border-white/10 text-xs">
-                  <div className="flex items-center gap-2 text-white/70 font-mono">
-                    <Building2 className="w-4 h-4 text-amber-300" />
-                    <span>Company</span>
+                <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#A9A296]">
+                  <span className="text-amber-300 font-bold">LVL 99</span>
+                  <span>·</span>
+                  <span>#001/100</span>
+                </div>
+              </CardItem>
+
+              {/* ART FRAME: High-end collectible portrait window (Z-Depth 65) */}
+              <CardItem
+                translateZ="65"
+                className="w-full my-3.5"
+              >
+                <div className="relative w-full h-[220px] sm:h-[240px] rounded-2xl overflow-hidden border border-[#D8B46E]/40 bg-gradient-to-b from-[#22202A] to-[#0F0E13] shadow-2xl">
+                  {/* Portrait photo */}
+                  <Image
+                    src="/character/albert_portrait.jpg"
+                    alt="Albert Christian"
+                    fill
+                    sizes="420px"
+                    className="object-cover object-top filter grayscale contrast-110 brightness-95 transition-transform duration-700 group-hover/card:scale-105"
+                  />
+
+                  {/* Vignette & Ambient Gold Floor Wash */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0A0E] via-transparent to-black/30" />
+                  
+                  {/* Top Right Holographic Chip */}
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md border border-amber-400/40 text-[9px] font-mono font-bold text-amber-200">
+                    <Sparkles className="w-2.5 h-2.5 text-amber-300" />
+                    <span>HOLO RARE</span>
                   </div>
-                  <span className="font-bold text-white">Krevia Digital</span>
+
+                  {/* Character Nameplate Strip (Z-Depth 80) */}
+                  <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2 p-2.5 rounded-xl bg-black/75 backdrop-blur-md border border-white/15">
+                    <div>
+                      <h4 className="text-white font-extrabold text-base sm:text-lg tracking-tight leading-none mb-1">
+                        Albert Christian
+                      </h4>
+                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-amber-300/90 font-medium">
+                        <Building2 className="w-3 h-3 text-amber-300" />
+                        <span>Founder · Krevia Digital</span>
+                      </div>
+                    </div>
+                    <span className="px-2 py-1 rounded-md text-[9px] font-mono font-extrabold tracking-wider bg-amber-400 text-[#14151B] shadow-xs">
+                      ARCHITECT
+                    </span>
+                  </div>
+                </div>
+              </CardItem>
+
+              {/* ABILITIES & STATS MATRIX (Z-Depth 50) */}
+              <CardItem
+                translateZ="50"
+                className="w-full space-y-2"
+              >
+                {/* 4 Core Dev Power Bars */}
+                <div className="space-y-1.5 bg-white/[0.03] p-3 rounded-2xl border border-white/10">
+                  <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[#9E978D] mb-1">
+                    <span className="flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-amber-300" />
+                      <span>Skill Attributes</span>
+                    </span>
+                    <span className="text-amber-300 font-bold">POWER INDEX 96</span>
+                  </div>
+
+                  {STATS.map((stat) => (
+                    <div key={stat.label} className="space-y-1">
+                      <div className="flex items-center justify-between text-[11px] font-mono">
+                        <span className="text-[#DDD6CC] font-medium truncate max-w-[240px]">{stat.label}</span>
+                        <span className="text-amber-200 font-bold tabular-nums">{stat.val}</span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full bg-gradient-to-r ${stat.color} transition-all duration-700`}
+                          style={{ width: `${stat.val}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="flex items-center justify-between bg-white/5 p-2.5 rounded-xl border border-white/10 text-xs">
-                  <div className="flex items-center gap-2 text-white/70 font-mono">
-                    <GraduationCap className="w-4 h-4 text-amber-300" />
-                    <span>Politeknik Caltex Riau</span>
+                {/* Passive Perk Box */}
+                <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-amber-400/[0.06] border border-amber-400/20 text-xs">
+                  <ShieldCheck className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-mono text-[11px] font-bold text-amber-200 tracking-wider uppercase block">
+                      Perk: Tactile Engineering
+                    </span>
+                    <p className="text-[11px] text-[#C9C2B6] leading-snug">
+                      High-precision full-stack builds, native responsiveness, and resilient clean architecture.
+                    </p>
                   </div>
-                  <span className="font-bold text-[#E2BE76]">GPA 3.42 / 4.00</span>
+                </div>
+              </CardItem>
+
+              {/* COLLECTOR FOOTER: Credentials & Authentication Chip (Z-Depth 40) */}
+              <CardItem
+                translateZ="40"
+                className="w-full pt-3 mt-1 border-t border-white/10 flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2 text-xs">
+                  <GraduationCap className="w-4 h-4 text-amber-300 shrink-0" />
+                  <div className="leading-tight">
+                    <span className="block font-mono text-[10px] text-[#A69E92]">Politeknik Caltex Riau</span>
+                    <span className="font-mono text-[11px] font-bold text-[#F3D794]">GPA 3.42 / 4.00</span>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 text-[10px] font-mono text-white/50">
-                  <div className="flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    <span>Tactile Holographic Pass</span>
-                  </div>
-                  <span>MOVE CURSOR TO TILT</span>
+                {/* Microchip Hologram Security Seal */}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-500/20 via-rose-500/15 to-cyan-500/20 border border-amber-400/40 text-[9px] font-mono text-amber-200 shadow-sm">
+                  <Cpu className="w-3.5 h-3.5 text-amber-300 animate-spin" style={{ animationDuration: '10s' }} />
+                  <span className="font-bold">VERIFIED</span>
                 </div>
-              </div>
-            </div>
-          </motion.div>
+              </CardItem>
+
+              {/* Micro interactive hint */}
+              <CardItem
+                translateZ="20"
+                className="w-full text-center pt-2 text-[9px] font-mono tracking-widest text-[#7D756A] uppercase"
+              >
+                ✦ Tilt cursor to inspect 3D holo sheen ✦
+              </CardItem>
+            </CardBody>
+          </CardContainer>
         </div>
       )}
     </AnimatePresence>

@@ -6,6 +6,7 @@ import { ArrowRight, ArrowDown, Sparkles } from 'lucide-react';
 import { FlipCalendar } from './FlipCalendar';
 import { HolographicCardModal } from '../cards/HolographicCardModal';
 import { useTheme } from '../providers/ThemeProvider';
+import { CloudShader } from '@/components/ui/cloud-shader';
 
 interface HeroProps {
   onOpenContact: () => void;
@@ -27,20 +28,32 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
       id="hero-section"
       aria-label="Introduction: Albert Christian Portfolio"
       className={`relative w-full min-h-[100svh] flex flex-col justify-between pt-24 sm:pt-28 pb-0 px-6 sm:px-10 lg:px-16 overflow-hidden select-none transition-colors duration-700 ${
-        isDark ? 'bg-[#121318]' : 'bg-[#ECE7E1]'
+        isDark ? 'bg-[#121318]' : 'bg-[#8cbfe8]'
       }`}
-      style={{
-        background: isDark
-          ? 'radial-gradient(120% 90% at 62% 28%, #1C1E28 0%, #13151B 52%, #0D0E12 100%)'
-          : 'radial-gradient(120% 90% at 62% 28%, #F7F4EF 0%, #EAE5DE 52%, #DDD6CE 100%)',
-      }}
     >
-      {/* Soft Vignette Overlay */}
+      {/* ACETERNITY WEBGL CLOUD SHADER BACKGROUND */}
+      <CloudShader
+        speed={1}
+        count={6}
+        cloudColor={isDark ? '#2E354B' : '#fbf8f2'}
+        skyTopColor={isDark ? '#0B0E17' : '#3876ba'}
+        skyBottomColor={isDark ? '#1A2238' : '#8cbfe8'}
+        className="absolute inset-0 z-0 pointer-events-none"
+      />
+
+      {/* Soft Atmospheric Readability Veil + Bottom Horizon Blend into Hallway */}
       <div
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
+        className={`absolute inset-0 z-[1] pointer-events-none transition-opacity duration-700 ${
           isDark
-            ? 'bg-gradient-to-b from-black/30 via-transparent to-black/50'
-            : 'bg-gradient-to-b from-white/35 via-transparent to-[#D8CFC7]/35'
+            ? 'bg-gradient-to-r from-[#0D0F17]/65 via-[#0D0F17]/25 to-transparent'
+            : 'bg-gradient-to-r from-[#FAF8F5]/55 via-[#FAF8F5]/20 to-transparent'
+        }`}
+      />
+      <div
+        className={`absolute inset-x-0 bottom-0 h-40 z-[1] pointer-events-none bg-gradient-to-t transition-colors duration-700 ${
+          isDark
+            ? 'from-[#14161D] via-[#14161D]/75 to-transparent'
+            : 'from-[#E6E1DA] via-[#E6E1DA]/70 to-transparent'
         }`}
       />
 
@@ -52,10 +65,10 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
           
           {/* Eyebrow Pill */}
           <div
-            className={`inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border text-xs font-mono tracking-wide mb-5 transition-colors duration-500 ${
+            className={`inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border backdrop-blur-md text-xs font-mono tracking-wide mb-5 transition-colors duration-500 ${
               isDark
-                ? 'bg-white/5 border-white/10 text-[#D4CCC3]'
-                : 'bg-white/65 border-[#D6CFC7] text-[#5C554E] shadow-2xs'
+                ? 'bg-[#14161E]/75 border-white/15 text-[#E5DEC3] shadow-sm'
+                : 'bg-white/80 border-white/90 text-[#181615] shadow-sm'
             }`}
           >
             <span className={`w-2 h-2 rounded-full ${isDark ? 'bg-amber-300' : 'bg-[#6B3A3F]'}`} />
@@ -67,13 +80,15 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
           {/* Large Headline */}
           <h1
             className={`text-4xl sm:text-6xl md:text-[68px] font-extrabold tracking-[-0.03em] leading-[1.02] transition-colors duration-500 ${
-              isDark ? 'text-[#FAF7F2]' : 'text-[#181615]'
+              isDark
+                ? 'text-[#FAF7F2] drop-shadow-[0_2px_16px_rgba(0,0,0,0.45)]'
+                : 'text-[#181615] drop-shadow-[0_2px_18px_rgba(255,255,255,0.65)]'
             }`}
           >
             Hi, I’m Albert.{' '}
             <span
               className={`font-semibold text-3xl sm:text-5xl md:text-[54px] block mt-1.5 transition-colors duration-500 ${
-                isDark ? 'text-[#9A9288]' : 'text-[#7A7067]'
+                isDark ? 'text-[#C4BCB3]' : 'text-[#2C2825]'
               }`}
             >
               I am a
@@ -87,8 +102,10 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
 
           {/* Concise Value Proposition */}
           <p
-            className={`max-w-xl text-sm sm:text-base leading-relaxed mb-7 transition-colors duration-500 ${
-              isDark ? 'text-[#ACA49A]' : 'text-[#544E49]'
+            className={`max-w-xl text-sm sm:text-base font-medium leading-relaxed mb-7 transition-colors duration-500 ${
+              isDark
+                ? 'text-[#D8D0C6] drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]'
+                : 'text-[#1F1C1A] drop-shadow-[0_1px_10px_rgba(255,255,255,0.75)]'
             }`}
           >
             Engineering performant web platforms, native Kotlin Android apps, ERP systems, and live event technology with tactile precision.
@@ -120,10 +137,10 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
             <button
               type="button"
               onClick={scrollToDoors}
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full border text-sm font-semibold transition-all duration-200 shadow-2xs hover:shadow-md active:scale-95 cursor-pointer ${
+              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full border backdrop-blur-md text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 cursor-pointer ${
                 isDark
-                  ? 'bg-white/8 hover:bg-white/14 border-white/15 text-[#FAF7F2]'
-                  : 'bg-white/75 hover:bg-white border-[#D4CCC3] text-[#181615]'
+                  ? 'bg-[#14161E]/75 hover:bg-[#1E212D] border-white/20 text-[#FAF7F2]'
+                  : 'bg-white/85 hover:bg-white border-white text-[#181615]'
               }`}
             >
               <span>Explore the 5 Doors</span>
@@ -142,7 +159,7 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
               className={`absolute -inset-6 rounded-full blur-3xl pointer-events-none transition-opacity duration-700 ${
                 isDark
                   ? 'bg-radial from-amber-300/15 via-transparent to-transparent'
-                  : 'bg-radial from-white/70 via-transparent to-transparent'
+                  : 'bg-radial from-white/75 via-transparent to-transparent'
               }`}
             />
 
@@ -151,7 +168,7 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
               className={`relative w-full h-[96%] rounded-t-[180px] p-2 transition-colors duration-500 shadow-2xl ${
                 isDark
                   ? 'bg-gradient-to-b from-[#2A2D3A] via-[#1E202A] to-transparent border border-white/15'
-                  : 'bg-gradient-to-b from-[#FAF8F5] via-[#EAE4DC] to-transparent border border-white/80'
+                  : 'bg-gradient-to-b from-[#FAF8F5] via-[#EAE4DC] to-transparent border border-white/90'
               }`}
             >
               <div className="relative w-full h-full rounded-t-[172px] overflow-hidden grayscale contrast-[1.08] brightness-[0.97]">
@@ -167,8 +184,8 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
                 <div
                   className={`absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t transition-colors duration-700 ${
                     isDark
-                      ? 'from-[#111217] via-[#111217]/65 to-transparent'
-                      : 'from-[#DFD8D0] via-[#DFD8D0]/60 to-transparent'
+                      ? 'from-[#14161D] via-[#14161D]/65 to-transparent'
+                      : 'from-[#E6E1DA] via-[#E6E1DA]/60 to-transparent'
                   }`}
                 />
               </div>
@@ -192,21 +209,21 @@ export function HeroRishiStyle({ onOpenContact }: HeroProps) {
       {/* BOTTOM HAIRLINE STATUS STRIP */}
       <div
         className={`relative z-20 w-full border-t py-4 text-[11px] sm:text-xs font-mono uppercase tracking-[0.18em] transition-colors duration-500 ${
-          isDark ? 'border-[#262833] text-[#948C84]' : 'border-[#D3CBC2] text-[#6E655E]'
+          isDark ? 'border-white/10 text-[#ABA39A]' : 'border-black/10 text-[#4A433D]'
         }`}
       >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <div className="inline-flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>AVAILABLE FOR SELECT PROJECTS</span>
+            <span className="font-semibold">AVAILABLE FOR SELECT PROJECTS</span>
           </div>
-          <div className={isDark ? 'text-amber-200/90 font-semibold' : 'text-[#4A433D] font-semibold'}>
+          <div className={isDark ? 'text-amber-200 font-bold' : 'text-[#181615] font-bold'}>
             BASED IN PEKANBARU · REMOTE-FRIENDLY
           </div>
           <button
             type="button"
             onClick={scrollToDoors}
-            className={`inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+            className={`inline-flex items-center gap-1.5 cursor-pointer font-semibold transition-colors ${
               isDark ? 'hover:text-white' : 'hover:text-[#181615]'
             }`}
           >

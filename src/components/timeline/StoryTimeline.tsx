@@ -95,30 +95,33 @@ export function StoryTimeline() {
       id="story-timeline"
       ref={containerRef}
       aria-label="Story Section: Let's go back in time"
-      className={`relative w-full py-24 sm:py-32 px-6 border-t overflow-hidden transition-colors duration-700 ${
+      className={`relative w-full py-24 sm:py-32 px-6 border-t transition-colors duration-700 ${
         isDark ? 'bg-[#111217] border-[#232530]' : 'bg-[#FAF8F5] border-[#DFD8CE]'
       }`}
     >
-      {/* Ambient background plaster gradient */}
-      <div
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
-          isDark ? 'opacity-25' : 'opacity-100'
-        }`}
-        style={{
-          background: isDark
-            ? 'radial-gradient(circle at 30% 30%, rgba(255, 220, 145, 0.06) 0%, transparent 65%)'
-            : 'radial-gradient(circle at 30% 30%, rgba(235, 228, 218, 0.7) 0%, transparent 65%)',
-        }}
-      />
+      {/* Ambient background plaster gradient wrapped in an overflow-hidden layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            isDark ? 'opacity-25' : 'opacity-100'
+          }`}
+          style={{
+            background: isDark
+              ? 'radial-gradient(circle at 30% 30%, rgba(255, 220, 145, 0.06) 0%, transparent 65%)'
+              : 'radial-gradient(circle at 30% 30%, rgba(235, 228, 218, 0.7) 0%, transparent 65%)',
+          }}
+        />
+      </div>
 
-      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start">
+      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
         
-        {/* LEFT COLUMN (STICKY PINNED) */}
-        <div className="lg:col-span-5 lg:sticky lg:top-32 relative">
-          
-          {/* Subtle Radar / Astronomical Clock SVG in background */}
-          <div className="absolute -top-10 -left-10 w-80 sm:w-96 h-80 sm:h-96 pointer-events-none opacity-35 select-none">
-            <svg
+        {/* LEFT COLUMN (STICKY TRACK PINNED WITHIN TIMELINE SECTION) */}
+        <div className="lg:col-span-5 relative h-full">
+          <div className="lg:sticky lg:top-28 xl:top-32 relative pb-8">
+            
+            {/* Subtle Radar / Astronomical Clock SVG in background */}
+            <div className="absolute -top-10 -left-6 sm:-left-10 w-80 sm:w-96 h-80 sm:h-96 pointer-events-none opacity-35 select-none overflow-hidden">
+              <svg
               viewBox="0 0 400 400"
               className={`w-full h-full transition-colors duration-500 ${
                 isDark ? 'stroke-[#3A3C48]' : 'stroke-[#DDD4C8]'
@@ -230,6 +233,7 @@ export function StoryTimeline() {
             </div>
           </div>
         </div>
+      </div>
 
         {/* RIGHT COLUMN (TIMELINE TRACK + MILESTONE CARDS) */}
         <div className="lg:col-span-7 relative flex items-start pl-2 sm:pl-4">

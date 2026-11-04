@@ -11,6 +11,7 @@ import { ContactModal } from '../modals/ContactModal';
 import { ScrollProgress } from '../layout/ScrollProgress';
 import { ProjectCardCover } from './ProjectCardCover';
 import { ProjectDetailModal } from '../modals/ProjectDetailModal';
+import { CardSpotlight } from '@/components/ui/card-spotlight';
 import {
   ArrowLeft,
   Check,
@@ -707,7 +708,7 @@ export function ProjectPageTemplate({ door, projects }: PageTemplateProps) {
             </div>
           ) : (
             /* =================================================================
-               MODE 2: BENTO GRID VIEW (With Overlapping 3D Cover Cards)
+               MODE 2: BENTO GRID VIEW (With Overlapping 3D Cover Cards & Card Spotlight)
                ================================================================= */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
               {filteredProjects.map((project) => (
@@ -717,155 +718,161 @@ export function ProjectPageTemplate({ door, projects }: PageTemplateProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                   onClick={() => setActiveModalProject(project)}
-                  className={`group p-5 sm:p-6 rounded-3xl backdrop-blur-xs border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer ${
-                    isDark
-                      ? 'bg-[#181A22]/90 border-[#282B38] hover:border-amber-300/40'
-                      : 'bg-[#FAF8F5]/95 border-[#D8D1C7] hover:border-[#1D3254]/40'
-                  }`}
+                  className="cursor-pointer"
                 >
-                  <div>
-                    {/* 3D Overlapping Cover */}
-                    <ProjectCardCover
-                      pattern={project.coverPattern}
-                      title={project.title}
-                      accentColor={project.accentColor}
-                      category={project.category}
-                      year={project.year}
-                      metrics={project.metrics}
-                      tags={project.tags}
-                      images={project.images}
-                      variant="compact"
-                    />
-
-                    {/* Card Header info */}
-                    <div className="mt-4 flex items-center justify-between text-xs font-mono">
-                      <span className={isDark ? 'text-[#9E968C]' : 'text-[#7C6C5E]'}>
-                        {project.year}
-                      </span>
-                      <span
-                        className={`px-2.5 py-0.5 rounded-full font-semibold ${
-                          isDark
-                            ? 'bg-white/8 text-amber-200'
-                            : 'bg-[#1D3254]/10 text-[#1D3254]'
-                        }`}
-                      >
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3
-                      className={`mt-2.5 text-xl font-bold tracking-tight transition-colors flex items-start justify-between gap-2 ${
-                        isDark
-                          ? 'text-[#FAF7F2] group-hover:text-amber-300'
-                          : 'text-[#181615] group-hover:text-[#1D3254]'
-                      }`}
-                    >
-                      <span>{project.title}</span>
-                      <ArrowUpRight className="w-4 h-4 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
-                    </h3>
-
-                    {/* Short Description */}
-                    <p
-                      className={`mt-2 text-sm line-clamp-3 leading-relaxed ${
-                        isDark ? 'text-[#ACA49A]' : 'text-[#544E49]'
-                      }`}
-                    >
-                      {project.shortDescription}
-                    </p>
-
-                    {/* Metrics Highlight if present */}
-                    {project.metrics && (
-                      <div
-                        className={`mt-3.5 py-1.5 px-3 rounded-xl border text-[11px] font-mono font-medium ${
-                          isDark
-                            ? 'bg-[#12141B] border-[#262936] text-amber-300'
-                            : 'bg-white border-[#E4DDD4] text-[#6B3A3F]'
-                        }`}
-                      >
-                        ⚡ {project.metrics}
-                      </div>
-                    )}
-
-                    {/* Tags */}
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {project.tags.slice(0, 3).map((t, idx) => (
-                        <span
-                          key={idx}
-                          className={`px-2.5 py-0.5 rounded-md border text-[10px] font-mono ${
-                            isDark
-                              ? 'bg-white/5 border-white/10 text-[#C4BCB3]'
-                              : 'bg-white border-[#E4DDD4] text-[#544E49]'
-                          }`}
-                        >
-                          {t}
-                        </span>
-                      ))}
-                      {project.tags.length > 3 && (
-                        <span
-                          className={`px-1.5 py-0.5 text-[10px] font-mono ${
-                            isDark ? 'text-[#8E867E]' : 'text-[#7C6C5E]'
-                          }`}
-                        >
-                          +{project.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Card Actions */}
-                  <div
-                    className={`mt-6 pt-4 border-t flex items-center justify-between ${
-                      isDark ? 'border-white/10' : 'border-[#E6E0D6]'
+                  <CardSpotlight
+                    radius={280}
+                    color={isDark ? '#262A38' : '#ECE5DB'}
+                    className={`h-full p-5 sm:p-6 rounded-[28px] border transition-all duration-300 flex flex-col justify-between ${
+                      isDark
+                        ? 'bg-[#181A22]/95 border-[#282B38] hover:border-amber-300/40 shadow-lg'
+                        : 'bg-[#FAF8F5]/98 border-[#D8D1C7] hover:border-[#1D3254]/40 shadow-md'
                     }`}
-                    onClick={(e) => e.stopPropagation()}
                   >
-                    <button
-                      type="button"
-                      onClick={() => setActiveModalProject(project)}
-                      className={`py-2 px-4 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
-                        isDark
-                          ? 'bg-amber-300/15 hover:bg-amber-300 text-amber-300 hover:text-[#14151B]'
-                          : 'bg-[#1D3254]/10 hover:bg-[#1D3254] text-[#1D3254] hover:text-white'
-                      }`}
-                    >
-                      View Specs
-                    </button>
+                    <div className="relative z-10">
+                      {/* 3D Overlapping Cover */}
+                      <ProjectCardCover
+                        pattern={project.coverPattern}
+                        title={project.title}
+                        accentColor={project.accentColor}
+                        category={project.category}
+                        year={project.year}
+                        metrics={project.metrics}
+                        tags={project.tags}
+                        images={project.images}
+                        variant="compact"
+                      />
 
-                    <div className="flex items-center gap-2">
-                      {project.links?.github && (
-                        <a
-                          href={project.links.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`GitHub repository for ${project.title}`}
-                          className={`p-2 rounded-full border transition-colors ${
+                      {/* Card Header info */}
+                      <div className="mt-4 flex items-center justify-between text-xs font-mono">
+                        <span className={isDark ? 'text-[#9E968C]' : 'text-[#7C6C5E]'}>
+                          {project.year}
+                        </span>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full font-semibold ${
                             isDark
-                              ? 'bg-[#12141B] hover:bg-white/10 text-white border-[#2A2D3A]'
-                              : 'bg-white hover:bg-[#EAE4DC] text-[#181615] border-[#D6CFC7]'
+                              ? 'bg-white/8 text-amber-200'
+                              : 'bg-[#1D3254]/10 text-[#1D3254]'
                           }`}
                         >
-                          <GithubIcon className="w-3.5 h-3.5" />
-                        </a>
-                      )}
+                          {project.category}
+                        </span>
+                      </div>
 
-                      {project.links?.live && (
-                        <a
-                          href={project.links.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`Live site for ${project.title}`}
-                          className={`p-2 rounded-full border transition-colors ${
+                      {/* Title */}
+                      <h3
+                        className={`mt-2.5 text-xl font-bold tracking-tight transition-colors flex items-start justify-between gap-2 ${
+                          isDark
+                            ? 'text-[#FAF7F2] group-hover:text-amber-300'
+                            : 'text-[#181615] group-hover:text-[#1D3254]'
+                        }`}
+                      >
+                        <span>{project.title}</span>
+                        <ArrowUpRight className="w-4 h-4 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
+                      </h3>
+
+                      {/* Short Description */}
+                      <p
+                        className={`mt-2 text-sm line-clamp-3 leading-relaxed ${
+                          isDark ? 'text-[#ACA49A]' : 'text-[#544E49]'
+                        }`}
+                      >
+                        {project.shortDescription}
+                      </p>
+
+                      {/* Metrics Highlight if present */}
+                      {project.metrics && (
+                        <div
+                          className={`mt-3.5 py-1.5 px-3 rounded-xl border text-[11px] font-mono font-medium ${
                             isDark
-                              ? 'bg-[#12141B] hover:bg-white/10 text-white border-[#2A2D3A]'
-                              : 'bg-white hover:bg-[#EAE4DC] text-[#181615] border-[#D6CFC7]'
+                              ? 'bg-[#12141B] border-[#262936] text-amber-300'
+                              : 'bg-white border-[#E4DDD4] text-[#6B3A3F]'
                           }`}
                         >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+                          ⚡ {project.metrics}
+                        </div>
                       )}
+
+                      {/* Tags */}
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {project.tags.slice(0, 3).map((t, idx) => (
+                          <span
+                            key={idx}
+                            className={`px-2.5 py-0.5 rounded-md border text-[10px] font-mono ${
+                              isDark
+                                ? 'bg-white/5 border-white/10 text-[#C4BCB3]'
+                                : 'bg-white border-[#E4DDD4] text-[#544E49]'
+                            }`}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                        {project.tags.length > 3 && (
+                          <span
+                            className={`px-1.5 py-0.5 text-[10px] font-mono ${
+                              isDark ? 'text-[#8E867E]' : 'text-[#7C6C5E]'
+                            }`}
+                          >
+                            +{project.tags.length - 3}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
+
+                    {/* Card Actions */}
+                    <div
+                      className={`relative z-10 mt-6 pt-4 border-t flex items-center justify-between ${
+                        isDark ? 'border-white/10' : 'border-[#E6E0D6]'
+                      }`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setActiveModalProject(project)}
+                        className={`py-2 px-4 rounded-xl text-xs font-mono font-semibold transition-all cursor-pointer ${
+                          isDark
+                            ? 'bg-amber-300/15 hover:bg-amber-300 text-amber-300 hover:text-[#14151B]'
+                            : 'bg-[#1D3254]/10 hover:bg-[#1D3254] text-[#1D3254] hover:text-white'
+                        }`}
+                      >
+                        View Specs
+                      </button>
+
+                      <div className="flex items-center gap-2">
+                        {project.links?.github && (
+                          <a
+                            href={project.links.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`GitHub repository for ${project.title}`}
+                            className={`p-2 rounded-full border transition-colors ${
+                              isDark
+                                ? 'bg-[#12141B] hover:bg-white/10 text-white border-[#2A2D3A]'
+                                : 'bg-white hover:bg-[#EAE4DC] text-[#181615] border-[#D6CFC7]'
+                            }`}
+                          >
+                            <GithubIcon className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+
+                        {project.links?.live && (
+                          <a
+                            href={project.links.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Live site for ${project.title}`}
+                            className={`p-2 rounded-full border transition-colors ${
+                              isDark
+                                ? 'bg-[#12141B] hover:bg-white/10 text-white border-[#2A2D3A]'
+                                : 'bg-white hover:bg-[#EAE4DC] text-[#181615] border-[#D6CFC7]'
+                            }`}
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </CardSpotlight>
                 </motion.article>
               ))}
             </div>
