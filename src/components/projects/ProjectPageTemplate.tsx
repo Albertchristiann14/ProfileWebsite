@@ -33,13 +33,30 @@ interface PageTemplateProps {
   projects: ProjectCard[];
 }
 
-export function ProjectPageTemplate({ door, projects }: PageTemplateProps) {
+export function ProjectPageTemplate({ door, projects: initialProjects }: PageTemplateProps) {
   const { triggerDoorReturn, triggerWalkThrough } = useDoorTransition();
   const { isDark } = useTheme();
+  const [projects, setProjects] = useState<ProjectCard[]>(initialProjects);
   const [selectedTag, setSelectedTag] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'stack' | 'grid'>('stack');
   const [activeModalProject, setActiveModalProject] = useState<ProjectCard | null>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
+
+  // Sync with live projects from Supabase / API
+  useEffect(() => {
+    let isMounted = true;
+    fetch(`/api/projects?door=${encodeURIComponent(door.route)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data.projects && data.projects.length > 0) {
+          setProjects(data.projects);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, [door.route]);
 
   // Extract unique filter tags
   const filterTags = useMemo(() => {
